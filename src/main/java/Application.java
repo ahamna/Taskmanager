@@ -1,3 +1,7 @@
+import com.google.gson.Gson;
+import okhttp3.*;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Application {
@@ -6,7 +10,7 @@ public class Application {
     static String input = "";
 
     static TaskManager  taskManager = new TaskManager();
-    public static void main(String args[]){
+    public static void main1(String args[]){
 
         while(inputAllowed){
             System.out.println("Enter EXIT to Quit Application\nEnter ADD to add new Task \nEnter SHOW to show all tasks");
@@ -36,5 +40,21 @@ public class Application {
 
         }
 
+    }
+
+    public static void main(String args[]){
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("http://swapi.dev/api/planets/6/")
+                .build();
+        Call call= okHttpClient.newCall(request);
+        Gson gson = new Gson();
+        try {
+            Response response = call.execute();
+            Planet planet =  gson.fromJson(response.body().charStream(), Planet.class);
+            System.out.println(planet);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
